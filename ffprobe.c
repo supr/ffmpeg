@@ -1373,6 +1373,13 @@ static void show_stream(WriterContext *w, AVFormatContext *fmt_ctx, int stream_i
             } else {
                 print_str_opt("timecode", "N/A");
             }
+            // XXXAD - PATCH INI
+            if (dec_ctx->profile != FF_PROFILE_UNKNOWN) {
+                print_str("profile", av_x_if_null(av_get_profile_name(dec, dec_ctx->profile), "unknown"));
+            }
+            if (dec_ctx->bit_rate > 0) print_val("bit_rate", dec_ctx->bit_rate, unit_bit_per_second_str);
+            else print_str_opt("bit_rate", "N/A");
+            // XXXAD - PATCH FINI
             break;
 
         case AVMEDIA_TYPE_AUDIO:
@@ -1382,6 +1389,10 @@ static void show_stream(WriterContext *w, AVFormatContext *fmt_ctx, int stream_i
             print_val("sample_rate",     dec_ctx->sample_rate, unit_hertz_str);
             print_int("channels",        dec_ctx->channels);
             print_int("bits_per_sample", av_get_bits_per_sample(dec_ctx->codec_id));
+            // XXXAD - PATCH INI
+            if (dec_ctx->bit_rate > 0) print_val("bit_rate", dec_ctx->bit_rate, unit_bit_per_second_str);
+            else print_str_opt("bit_rate", "N/A");
+            // XXXAD - PATCH FINI
             break;
         }
     } else {
